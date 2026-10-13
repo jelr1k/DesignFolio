@@ -38,7 +38,6 @@ def upload_to_supabase(filename: str, data: bytes, content_type: str) -> str:
         data=data,
         method="POST",
         headers={
-            "Authorization": f"Bearer {settings.supabase_secret_key}",
             "apikey": settings.supabase_secret_key,
             "Content-Type": content_type,
             "Cache-Control": "3600",
