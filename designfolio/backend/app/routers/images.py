@@ -20,9 +20,8 @@ ALLOWED = {
     "image/jpeg": ".jpg",
     "image/png": ".png",
     "image/webp": ".webp",
-    "image/gif": ".gif",
 }
-MAX_SIZE = 8 * 1024 * 1024
+MAX_SIZE = 5 * 1024 * 1024
 
 
 def upload_to_supabase(filename: str, data: bytes, content_type: str) -> str:
