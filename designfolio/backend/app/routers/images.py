@@ -87,7 +87,7 @@ async def upload_image(
     if not data:
         raise HTTPException(status_code=400, detail="Empty file")
     if len(data) > MAX_SIZE:
-        raise HTTPException(status_code=413, detail="Image is too large (max 8 MB)")
+        raise HTTPException(status_code=413, detail="Image is too large (max 5 MB)")
 
     filename = f"works/{work_id}/{uuid4().hex}{ALLOWED[file.content_type]}"
     public_url = upload_to_supabase(filename, data, file.content_type)
