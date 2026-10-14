@@ -93,6 +93,73 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
   );
 }
 
+
+/* Edge-anchored geometry: the artwork starts at the actual viewport edges,
+   then fades inward instead of leaving flat red gutters. */
+.home-shell::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(145deg, rgba(255,255,255,.09) 0%, transparent 24%, rgba(101,0,22,.075) 24.3%, transparent 24.7%, transparent 58%, rgba(255,255,255,.075) 58.3%, transparent 58.7%),
+    repeating-linear-gradient(145deg, transparent 0 88px, rgba(255,255,255,.34) 89px 90px, transparent 91px 158px),
+    repeating-linear-gradient(38deg, transparent 0 124px, rgba(101,0,22,.31) 125px 126px, transparent 127px 218px),
+    linear-gradient(35deg, rgba(101,0,22,.09) 0%, transparent 35%, rgba(255,255,255,.065) 35.3%, transparent 35.7%, transparent 65%, rgba(101,0,22,.06) 65.3%, transparent 65.7%),
+    repeating-linear-gradient(38deg, transparent 0 97px, rgba(101,0,22,.33) 98px 99px, transparent 100px 174px),
+    repeating-linear-gradient(145deg, transparent 0 133px, rgba(255,255,255,.31) 134px 135px, transparent 136px 226px);
+  background-size:
+    42% 100%,
+    42% 100%,
+    42% 100%,
+    42% 100%,
+    42% 100%,
+    42% 100%;
+  background-position:
+    left top,
+    left top,
+    left top,
+    right top,
+    right top,
+    right top;
+  background-repeat: no-repeat;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    #000 0%,
+    rgba(0,0,0,.98) 8%,
+    rgba(0,0,0,.88) 16%,
+    rgba(0,0,0,.72) 22%,
+    rgba(0,0,0,.48) 29%,
+    rgba(0,0,0,.22) 36%,
+    transparent 44%,
+    transparent 56%,
+    rgba(0,0,0,.22) 64%,
+    rgba(0,0,0,.48) 71%,
+    rgba(0,0,0,.72) 78%,
+    rgba(0,0,0,.88) 84%,
+    rgba(0,0,0,.98) 92%,
+    #000 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    #000 0%,
+    rgba(0,0,0,.98) 8%,
+    rgba(0,0,0,.88) 16%,
+    rgba(0,0,0,.72) 22%,
+    rgba(0,0,0,.48) 29%,
+    rgba(0,0,0,.22) 36%,
+    transparent 44%,
+    transparent 56%,
+    rgba(0,0,0,.22) 64%,
+    rgba(0,0,0,.48) 71%,
+    rgba(0,0,0,.72) 78%,
+    rgba(0,0,0,.88) 84%,
+    rgba(0,0,0,.98) 92%,
+    #000 100%
+  );
+}
+
 .home-header {
   position: relative;
   z-index: 10;
@@ -521,6 +588,8 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 .community-decoration span:nth-child(3) { inset: 50px 35px; background: rgba(255,255,255,.04); border-color: rgba(255,255,255,.13); }
 
 .home-footer {
+  position: relative;
+  z-index: 1;
   width: min(1280px, calc(100% - 64px));
   min-height: 85px;
   margin: 0 auto;
