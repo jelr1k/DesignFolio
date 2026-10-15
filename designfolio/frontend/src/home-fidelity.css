@@ -616,7 +616,7 @@
     width: 100%;
     grid-template-columns: repeat(2,minmax(0,1fr));
     gap: 16px 6px;
-    margin-top: 17px;
+    margin-top: 15px;
   }
   .category-card {
     height: 62px;
@@ -628,7 +628,7 @@
   .category-name { margin: 0 20px 4px 0; font-size: 14px; line-height: 1.25; }
   .category-count { font-size: 11px; line-height: 1.2; }
   .category-arrow { top: 11px; right: 12px; font-size: 16px; }
-  .home-works { margin-top: 17px; }
+  .home-works { margin-top: 39px; }
   .section-heading--works { align-items: center; gap: 10px; margin-bottom: 22px; }
   .section-heading--works h2 { font-size: 25px; line-height: 1.25; }
   .section-heading--works .section-caption { max-width: 200px; font-size: 11px; }
