@@ -19,7 +19,7 @@ function DashboardSidebar({ active = "overview" }) {
   );
 }
 
-function RestrictedOrLogin({ user, loading, error }) {
+function getRestrictedPage({ user, loading, error }) {
   if (loading) return <SiteLayout><div className="df-loading-state">Проверяем сессию…</div></SiteLayout>;
   if (!user) return (
     <SiteLayout>
@@ -55,7 +55,7 @@ export function DashboardPage() {
     return () => { active = false; };
   }, [user]);
 
-  const blocked = <RestrictedOrLogin user={user} loading={userLoading} error={userError} />;
+  const blocked = getRestrictedPage({ user, loading: userLoading, error: userError });
   if (blocked) return blocked;
 
   return (
@@ -102,7 +102,7 @@ export function DashboardPage() {
 
 export function ProfileSettingsPage() {
   const { user, loading, error } = useCurrentUser();
-  const blocked = <RestrictedOrLogin user={user} loading={loading} error={error} />;
+  const blocked = getRestrictedPage({ user, loading, error });
   if (blocked) return blocked;
 
   return (
