@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { AppRouter } from "./router";
 import "./styles.css";
 import "./styles/interior.css";
+import "./home-fidelity.css";
 
 createRoot(document.getElementById("root")).render(
   <React.StrictMode>
