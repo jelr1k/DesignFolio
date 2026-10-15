@@ -168,9 +168,22 @@ export function CatalogPage() {
         </button>
 
         <nav className={`home-nav${menuOpen ? " is-open" : ""}`} aria-label="Основная навигация">
-          <a href="#works" onClick={() => setMenuOpen(false)}>Работы</a>
-          <a href="#categories" onClick={() => setMenuOpen(false)}>Категории</a>
-          <a href="#community" onClick={() => setMenuOpen(false)}>Сообщество</a>
+          <Link to="/works" onClick={() => setMenuOpen(false)}>Работы</Link>
+          <Link to="/designers" onClick={() => setMenuOpen(false)}>Дизайнеры</Link>
+          <a href="#community" onClick={() => setMenuOpen(false)}>О платформе</a>
+          <div className="mobile-nav-auth">
+            {user ? (
+              <>
+                <Link to="/dashboard" onClick={() => setMenuOpen(false)}>Личный кабинет</Link>
+                <button type="button" onClick={logout}>Выйти из аккаунта</button>
+              </>
+            ) : (
+              <>
+                <Link to="/login" onClick={() => setMenuOpen(false)}>Войти</Link>
+                <Link to="/register" onClick={() => setMenuOpen(false)}>Регистрация</Link>
+              </>
+            )}
+          </div>
         </nav>
 
         <form
@@ -214,42 +227,31 @@ export function CatalogPage() {
 
       <main className="home-content">
         <section className="home-hero" aria-labelledby="home-title">
-          <div className="home-abstract" aria-hidden="true">
-            <span className="abstract-orb" />
-            <span className="abstract-ring abstract-ring--one" />
-            <span className="abstract-ring abstract-ring--two" />
-            <span className="abstract-ribbon abstract-ribbon--one" />
-            <span className="abstract-ribbon abstract-ribbon--two" />
-            <span className="abstract-spark abstract-spark--one">✳</span>
-            <span className="abstract-spark abstract-spark--two">✳</span>
-          </div>
-
           <div className="hero-copy">
-            <p className="hero-kicker">ПЛАТФОРМА ДЛЯ ТВОРЧЕСТВА</p>
+            <p className="hero-kicker">СТУДЕНЧЕСКИЕ ПОРТФОЛИО</p>
             <h1 id="home-title">Портфолио, которое говорит за тебя.</h1>
             <p className="hero-description">
-              Публикуй проекты, находи вдохновение и открывай дизайнеров,
-              за которыми хочется следить.
+              Публикуй проекты, находи вдохновение и открывай дизайнеров, за которыми хочется следить.
             </p>
             <div className="hero-actions">
               <a className="button-primary" href="#works">Смотреть работы <span aria-hidden="true">↗</span></a>
-              <Link className="button-secondary" to={user ? "/works/new" : "/login"}>Загрузить работу <span aria-hidden="true">＋</span></Link>
+              <a className="button-secondary desktop-hero-secondary" href="#community">Подробнее</a>
+              <Link className="button-secondary mobile-hero-secondary" to={user ? "/dashboard/works/new" : "/login"}>Загрузить работу</Link>
             </div>
-            <div className="hero-note"><span /> Пространство для новых идей</div>
           </div>
 
-          <div className="hero-index" aria-hidden="true">
-            <span>DESIGN</span>
-            <span>FOLIO</span>
-            <b>№ 01</b>
+          <div className="home-abstract" aria-hidden="true">
+            <span className="hero-art-dark-orb" />
+            <span className="hero-art-red-orb" />
+            <span className="hero-art-white-orb" />
           </div>
         </section>
 
         <section className="home-categories" id="categories" aria-labelledby="categories-title">
           <div className="section-heading section-heading--dark">
             <div>
-              <p className="section-eyebrow">НАЙДИ СВОЙ СТИЛЬ</p>
               <h2 id="categories-title">Исследуй категории</h2>
+              <p className="section-caption category-caption">Выбирай направление и смотри работы студентов</p>
             </div>
             {category && (
               <button className="clear-filter" type="button" onClick={() => { setCategory(""); setPage(1); }}>
@@ -285,13 +287,10 @@ export function CatalogPage() {
         <section className="home-works" id="works" aria-labelledby="works-title">
           <div className="section-heading section-heading--works">
             <div>
-              <p className="section-eyebrow">ВЫБОР СООБЩЕСТВА</p>
               <h2 id="works-title">{category ? "Работы в категории" : "Популярные работы"}</h2>
-              <p className="section-caption">
-                {q.trim() ? `Результаты поиска: «${q.trim()}»` : "Свежие проекты, идеи и визуальные эксперименты."}
-              </p>
+              {q.trim() && <p className="section-caption">Результаты поиска: «{q.trim()}»</p>}
             </div>
-            <a className="text-link" href="#works">Смотреть все <span aria-hidden="true">→</span></a>
+            <Link className="text-link" to="/works">Смотреть все <span aria-hidden="true">→</span></Link>
           </div>
 
           {loading ? (
@@ -314,6 +313,7 @@ export function CatalogPage() {
                     <Link className="home-work-card" to={`/works/${work.id}`} key={work.id}>
                       <WorkArtwork work={work} categoryName={categoryName} index={index} />
                       <div className="home-work-details">
+                        <span className="home-work-category">{categoryName}</span>
                         <div className="home-work-title-row">
                           <h3>{work.title}</h3>
                           <span className="work-open" aria-hidden="true">↗</span>
@@ -349,10 +349,10 @@ export function CatalogPage() {
       </main>
 
       <footer className="home-footer">
-        <Link className="footer-brand" to="/">DesignFolio<span>®</span></Link>
+        <Link className="footer-brand" to="/">DesignFolio</Link>
         <nav aria-label="Навигация в подвале">
           <a href="#community">О платформе</a>
-          <a href="#categories">Категории</a>
+          <a href="#works">Условия</a>
           <a href="mailto:hello@designfolio.local">Контакты</a>
         </nav>
         <p>© 2026 DesignFolio</p>
