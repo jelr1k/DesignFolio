@@ -101,9 +101,49 @@ export function DashboardPage() {
 }
 
 export function ProfileSettingsPage() {
-  const { user, loading, error } = useCurrentUser();
-  const blocked = getRestrictedPage({ user, loading, error });
+  const { user, setUser, loading, error: sessionError } = useCurrentUser();
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [bio, setBio] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState("");
+  const [formError, setFormError] = useState("");
+
+  useEffect(() => {
+    if (!user) return;
+    setUsername(user.username || "");
+    setEmail(user.email || "");
+    setBio(user.bio || "");
+    setAvatarUrl(user.avatar_url || "");
+  }, [user]);
+
+  const blocked = getRestrictedPage({ user, loading, error: sessionError });
   if (blocked) return blocked;
+
+  async function saveProfile(event) {
+    event.preventDefault();
+    setSaving(true);
+    setFormError("");
+    setMessage("");
+    try {
+      const updated = await api("/api/me", {
+        method: "PATCH",
+        body: JSON.stringify({
+          username: username.trim(),
+          email: email.trim(),
+          bio: bio.trim() || null,
+          avatar_url: avatarUrl.trim() || null
+        })
+      });
+      setUser(updated);
+      setMessage("Профиль сохранён.");
+    } catch (requestError) {
+      setFormError(requestError.message || "Не удалось сохранить профиль.");
+    } finally {
+      setSaving(false);
+    }
+  }
 
   return (
     <SiteLayout wide className="df-main--dashboard">
@@ -111,17 +151,23 @@ export function ProfileSettingsPage() {
         <DashboardSidebar active="profile" />
         <section className="df-dashboard-content">
           <p className="df-eyebrow">АККАУНТ / 01</p>
-          <PageHeading title="Настройки профиля" description="Данные, связанные с текущей учётной записью." />
-          <div className="df-settings-card">
-            <div className="df-settings-avatar">{(user.username || "DF").slice(0, 2).toUpperCase()}</div>
+          <PageHeading title="Настройки профиля" description="Обнови публичную информацию и контакты, которые увидят посетители твоего портфолио." />
+          <form className="df-settings-card" onSubmit={saveProfile}>
+            <div className="df-settings-avatar">{(username || "DF").slice(0, 2).toUpperCase()}</div>
             <div className="df-settings-fields">
-              <label className="df-field"><span>Имя пользователя</span><input value={user.username || ""} readOnly /></label>
-              <label className="df-field"><span>E-mail</span><input value={user.email || ""} readOnly /></label>
+              <label className="df-field"><span>Имя пользователя</span><input required minLength={3} maxLength={50} value={username} onChange={(event) => setUsername(event.target.value)} /></label>
+              <label className="df-field"><span>E-mail для связи</span><input required type="email" value={email} onChange={(event) => setEmail(event.target.value)} /></label>
+              <label className="df-field"><span>Ссылка на аватар</span><input type="url" value={avatarUrl} onChange={(event) => setAvatarUrl(event.target.value)} placeholder="https://..." /></label>
+              <label className="df-field"><span>О себе</span><textarea rows={5} maxLength={1200} value={bio} onChange={(event) => setBio(event.target.value)} placeholder="Направление, интересы и чем занимаешься…" /></label>
               <label className="df-field"><span>Роль</span><input value={user.role || "viewer"} readOnly /></label>
             </div>
-            <div className="df-notice df-notice--info">Редактирование профиля пока не поддерживается серверным API. Здесь отображаются реальные данные аккаунта, поля намеренно доступны только для чтения.</div>
-            <Link className="df-button df-button--secondary" to="/dashboard">Вернуться в кабинет</Link>
-          </div>
+            {formError && <ErrorNotice>{formError}</ErrorNotice>}
+            {message && <div className="df-notice df-notice--info" role="status">{message}</div>}
+            <div className="df-editor-actions">
+              <button className="df-button df-button--primary" disabled={saving}>{saving ? "Сохраняем…" : "Сохранить профиль"}</button>
+              <Link className="df-button df-button--secondary" to="/dashboard">Вернуться в кабинет</Link>
+            </div>
+          </form>
         </section>
       </div>
     </SiteLayout>

@@ -75,6 +75,7 @@ export function SiteHeader() {
       <nav className={"df-nav" + (menuOpen ? " is-open" : "")} aria-label="Основная навигация">
         <Link className={activePath.startsWith("/works") ? "is-active" : ""} to="/works" onClick={() => setMenuOpen(false)}>Работы</Link>
         <Link className={activePath.startsWith("/designers") ? "is-active" : ""} to="/designers" onClick={() => setMenuOpen(false)}>Дизайнеры</Link>
+        <Link className={activePath === "/contacts" ? "is-active" : ""} to="/contacts" onClick={() => setMenuOpen(false)}>Контакты</Link>
         <Link to="/#community" onClick={() => setMenuOpen(false)}>О платформе</Link>
         {user && <Link className={activePath.startsWith("/dashboard") ? "is-active" : ""} to="/dashboard" onClick={() => setMenuOpen(false)}>Кабинет</Link>}
         {user?.role === "admin" && <Link to="/admin" onClick={() => setMenuOpen(false)}>Админка</Link>}
@@ -125,7 +126,7 @@ export function SiteFooter() {
         <Link to="/works">Работы</Link>
         <Link to="/designers">Дизайнеры</Link>
         <Link to="/#community">О платформе</Link>
-        <a href="mailto:hello@designfolio.local">Контакты</a>
+        <Link to="/contacts">Контакты</Link>
       </nav>
       <span className="df-copyright">© 2026 DesignFolio</span>
     </footer>

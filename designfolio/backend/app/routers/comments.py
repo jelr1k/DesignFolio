@@ -46,11 +46,13 @@ def create_comment(work_id: int, payload: CommentCreate, current_user=Depends(ge
     return comment
 
 @router.delete("/{comment_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_comment(comment_id: int, current_user=Depends(get_current_user), db: Session = Depends(get_db)):
-    comment = db.get(Comment, comment_id)
+def delete_comment(work_id: int, comment_id: int, current_user=Depends(get_current_user), db: Session = Depends(get_db)):
+    work = get_visible_work(work_id, db)
+    comment = db.scalar(select(Comment).where(Comment.id == comment_id, Comment.work_id == work_id))
     if comment is None or comment.is_hidden:
         raise HTTPException(status_code=404, detail="Comment not found")
-    if comment.user_id != current_user.id and current_user.role != "admin":
+    # A comment can be removed by its author, the author of the work, or an admin.
+    if comment.user_id != current_user.id and work.author_id != current_user.id and current_user.role != "admin":
         raise HTTPException(status_code=403, detail="Not enough permissions")
     db.delete(comment)
     db.commit()

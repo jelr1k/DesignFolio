@@ -8,7 +8,7 @@ from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session
 
 from app.database import get_db
-from app.models import Category, Tag, Work, WorkTag
+from app.models import Category, Like, Tag, Work, WorkTag
 from app.routers.auth import get_current_user
 from app.schemas.work import WorkCreate, WorkListResponse, WorkResponse, WorkUpdate
 
@@ -48,14 +48,15 @@ def list_works(
     search: str | None = Query(None, max_length=100),
     category_id: int | None = Query(None, ge=1),
     tag_id: int | None = Query(None, ge=1),
-    sort: str = Query("newest", pattern="^(newest|oldest)$"),
+    sort: str = Query("newest", pattern="^(newest|oldest|popular)$"),
     db: Session = Depends(get_db),
 ):
     query = select(Work).where(Work.is_hidden.is_(False))
 
     if search:
         term = f"%{search.strip()}%"
-        query = query.where(or_(Work.title.ilike(term), Work.description.ilike(term)))
+        matching_tagged_works = select(WorkTag.work_id).join(Tag, Tag.id == WorkTag.tag_id).where(Tag.name.ilike(term))
+        query = query.where(or_(Work.title.ilike(term), Work.description.ilike(term), Work.id.in_(matching_tagged_works)))
 
     if category_id is not None:
         query = query.where(Work.category_id == category_id)
@@ -65,9 +66,13 @@ def list_works(
             raise HTTPException(status_code=400, detail="Tag not found")
         query = query.join(WorkTag, WorkTag.work_id == Work.id).where(WorkTag.tag_id == tag_id)
 
-    query = query.order_by(
-        Work.created_at.asc() if sort == "oldest" else Work.created_at.desc()
-    )
+    likes_count = select(func.count(Like.work_id)).where(Like.work_id == Work.id).scalar_subquery()
+    if sort == "oldest":
+        query = query.order_by(Work.created_at.asc())
+    elif sort == "popular":
+        query = query.order_by(likes_count.desc(), Work.created_at.desc())
+    else:
+        query = query.order_by(Work.created_at.desc())
 
     total = db.scalar(select(func.count()).select_from(query.order_by(None).subquery())) or 0
     items = db.scalars(query.offset((page - 1) * limit).limit(limit)).all()
@@ -92,6 +97,8 @@ def create_work(
     current_user=Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
+    if current_user.role not in {"designer", "admin"}:
+        raise HTTPException(status_code=403, detail="Only designers can publish works")
     if db.get(Category, payload.category_id) is None:
         raise HTTPException(status_code=400, detail="Category not found")
 

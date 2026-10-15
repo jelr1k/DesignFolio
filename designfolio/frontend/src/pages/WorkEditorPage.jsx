@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { api } from "../api/client";
-import { Breadcrumbs, ErrorNotice, SiteLayout } from "../components/SiteLayout";
+import { Breadcrumbs, EmptyState, ErrorNotice, SiteLayout, useCurrentUser } from "../components/SiteLayout";
 
 export function WorkEditorPage() {
   const { id } = useParams();
   const edit = Boolean(id);
   const navigate = useNavigate();
+  const { user, loading: userLoading } = useCurrentUser();
   const [categories, setCategories] = useState([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -60,7 +61,9 @@ export function WorkEditorPage() {
     }
   }
 
-  if (initialLoading) return <SiteLayout><div className="df-loading-state">Загружаем редактор…</div></SiteLayout>;
+  if (userLoading || initialLoading) return <SiteLayout><div className="df-loading-state">Проверяем доступ и загружаем редактор…</div></SiteLayout>;
+  if (!user) return <SiteLayout><EmptyState title="Войди, чтобы публиковать работы" description="Публикация и редактирование доступны только после входа в аккаунт." action={<Link className="df-button df-button--primary" to="/login">Войти</Link>} /></SiteLayout>;
+  if (user.role !== "designer" && user.role !== "admin") return <SiteLayout><EmptyState title="Публикация доступна дизайнерам" description="У этой учётной записи роль зрителя. Чужие работы нельзя редактировать." action={<Link className="df-button df-button--secondary" to="/dashboard">Вернуться в кабинет</Link>} /></SiteLayout>;
 
   return (
     <SiteLayout wide>

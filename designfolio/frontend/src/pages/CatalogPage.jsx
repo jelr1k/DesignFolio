@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { api, API } from "../api/client";
 
@@ -52,6 +52,38 @@ export function CatalogPage() {
   const [error, setError] = useState("");
   const [user, setUser] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [featuredIndex, setFeaturedIndex] = useState(0);
+  const touchStartX = useRef(null);
+
+  useEffect(() => {
+    const sections = document.querySelectorAll("[data-reveal]");
+    if (!sections.length || !("IntersectionObserver" in window)) return undefined;
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("df-revealed");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    sections.forEach((section) => {
+      section.classList.add("df-reveal-pending");
+      observer.observe(section);
+    });
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    setFeaturedIndex(0);
+  }, [q, category, page]);
+
+  useEffect(() => {
+    if (works.length <= 3) return undefined;
+    const timer = window.setInterval(() => {
+      setFeaturedIndex((current) => (current + 1) % (works.length - 2));
+    }, 6500);
+    return () => window.clearInterval(timer);
+  }, [works.length]);
 
   useEffect(() => {
     let cancelled = false;
@@ -103,7 +135,7 @@ export function CatalogPage() {
     const params = new URLSearchParams({
       page: String(page),
       limit: String(PAGE_SIZE),
-      sort: "newest",
+      sort: "popular",
     });
     if (q.trim()) params.set("search", q.trim());
     if (category) params.set("category_id", category);
@@ -247,23 +279,23 @@ export function CatalogPage() {
           </div>
         </section>
 
-        <section className="home-categories" id="categories" aria-labelledby="categories-title">
+        <section className="home-categories" id="categories" data-reveal aria-labelledby="categories-title">
           <div className="section-heading section-heading--dark">
             <div>
               <h2 id="categories-title">Исследуй категории</h2>
               <p className="section-caption category-caption">Выбирай направление и смотри работы студентов</p>
             </div>
             {category && (
-              <button className="clear-filter" type="button" onClick={() => { setCategory(""); setPage(1); }}>
+              <button className="clear-filter" type="button" onClick={() => { setCategory(""); setPage(1); setFeaturedIndex(0); }}>
                 Сбросить фильтр ×
               </button>
             )}
           </div>
 
           <div className="category-list">
-            {categories.length ? categories.slice(0, 3).map((item, index) => (
+            {categories.length ? categories.slice(0, 6).map((item, index) => (
               <button
-                className={`category-card category-card--${index}${category === String(item.id) ? " is-active" : ""}`}
+                className={`category-card category-card--${index % 3}${category === String(item.id) ? " is-active" : ""}`}
                 key={item.id}
                 type="button"
                 aria-pressed={category === String(item.id)}
@@ -284,7 +316,7 @@ export function CatalogPage() {
           </div>
         </section>
 
-        <section className="home-works" id="works" aria-labelledby="works-title">
+        <section className="home-works" id="works" data-reveal aria-labelledby="works-title">
           <div className="section-heading section-heading--works">
             <div>
               <h2 id="works-title">{category ? "Работы в категории" : "Популярные работы"}</h2>
@@ -306,8 +338,26 @@ export function CatalogPage() {
             </div>
           ) : (
             <>
-              <div className="works-grid">
-                {works.map((work, index) => {
+              <div className="home-carousel-controls" role="group" aria-label="Слайдер популярных работ">
+                <button type="button" aria-label="Предыдущие работы" disabled={featuredIndex <= 0} onClick={() => setFeaturedIndex((current) => Math.max(0, current - 1))}>←</button>
+                <div className="home-carousel-dots">
+                  {Array.from({ length: Math.max(1, works.length - 2) }, (_, index) => (
+                    <button key={index} type="button" className={featuredIndex === index ? "is-active" : ""} aria-label={`Слайд ${index + 1}`} aria-pressed={featuredIndex === index} onClick={() => setFeaturedIndex(index)} />
+                  ))}
+                </div>
+                <button type="button" aria-label="Следующие работы" disabled={featuredIndex >= Math.max(0, works.length - 3)} onClick={() => setFeaturedIndex((current) => Math.min(Math.max(0, works.length - 3), current + 1))}>→</button>
+              </div>
+              <div className="works-grid"
+                onTouchStart={(event) => { touchStartX.current = event.changedTouches[0]?.clientX ?? null; }}
+                onTouchEnd={(event) => {
+                  if (touchStartX.current === null) return;
+                  const delta = event.changedTouches[0].clientX - touchStartX.current;
+                  if (Math.abs(delta) > 40) setFeaturedIndex((current) => delta < 0
+                    ? Math.min(Math.max(0, works.length - 3), current + 1)
+                    : Math.max(0, current - 1));
+                  touchStartX.current = null;
+                }}>
+                {works.slice(featuredIndex, featuredIndex + 3).map((work, index) => {
                   const categoryName = getCategoryName(categories, work.category_id);
                   return (
                     <Link className="home-work-card" to={`/works/${work.id}`} key={work.id}>
@@ -338,7 +388,7 @@ export function CatalogPage() {
           )}
         </section>
 
-        <section className="home-community" id="community" aria-labelledby="community-title">
+        <section className="home-community" id="community" data-reveal aria-labelledby="community-title">
           <div className="community-decoration" aria-hidden="true"><span /><span /><span /></div>
           <p className="section-eyebrow">ТВОЙ ХОД</p>
           <h2 id="community-title">Покажи, что ты умеешь</h2>
@@ -353,7 +403,7 @@ export function CatalogPage() {
         <nav aria-label="Навигация в подвале">
           <a href="#community">О платформе</a>
           <a href="#works">Условия</a>
-          <a href="mailto:hello@designfolio.local">Контакты</a>
+          <Link to="/contacts">Контакты</Link>
         </nav>
         <p>© 2026 DesignFolio</p>
       </footer>

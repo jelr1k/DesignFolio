@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { API, api } from "../api/client";
-import { Breadcrumbs, EmptyState, ErrorNotice, PageHeading, SiteLayout, WorkCard } from "../components/SiteLayout";
+import { Breadcrumbs, EmptyState, ErrorNotice, PageHeading, SiteLayout, WorkCard, useCurrentUser } from "../components/SiteLayout";
 
 export function WorkPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user } = useCurrentUser();
   const [work, setWork] = useState(null);
   const [categories, setCategories] = useState([]);
   const [comments, setComments] = useState([]);
@@ -100,7 +101,7 @@ export function WorkPage() {
         <div className="df-work-detail-actions">
           <button className={"df-button " + (like?.liked ? "df-button--liked" : "df-button--secondary")} type="button" onClick={toggleLike}>♡ {like?.liked ? "Нравится" : "Поставить лайк"} <strong>{like?.likes_count ?? "—"}</strong></button>
           <Link className="df-button df-button--secondary" to={"/designers/" + work.author_id}>Профиль автора ↗</Link>
-          {localStorage.getItem("designfolio_token") && <Link className="df-button df-button--primary" to={"/works/" + id + "/edit"}>Редактировать</Link>}
+          {user && (user.id === work.author_id || user.role === "admin") && <Link className="df-button df-button--primary" to={"/works/" + id + "/edit"}>Редактировать</Link>}
         </div>
       </div>
 
@@ -130,7 +131,7 @@ export function WorkPage() {
               <article className="df-comment" key={comment.id}>
                 <div className="df-comment-avatar">{String(comment.user_id).slice(-2).padStart(2, "0")}</div>
                 <div><strong>Пользователь #{comment.user_id}</strong><p>{comment.content}</p>
-                  {localStorage.getItem("designfolio_token") && <button className="df-text-button" type="button" onClick={() => deleteComment(comment.id)}>Удалить</button>}
+                  {user && (user.id === comment.user_id || user.id === work.author_id || user.role === "admin") && <button className="df-text-button" type="button" onClick={() => deleteComment(comment.id)}>Удалить</button>}
                 </div>
               </article>
             )) : <p className="df-muted-copy">Комментариев пока нет. Будь первым, кто оставит отзыв.</p>}

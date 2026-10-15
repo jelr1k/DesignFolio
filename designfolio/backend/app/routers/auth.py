@@ -30,6 +30,8 @@ class UserResponse(BaseModel):
     username: str
     email: EmailStr
     role: str
+    avatar_url: str | None = None
+    bio: str | None = None
 
     model_config = {"from_attributes": True}
 
@@ -53,6 +55,8 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
     user = db.get(User, user_id)
     if user is None:
         raise credentials_error
+    if user.is_blocked:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Account is blocked")
     return user
 
 @router.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
@@ -77,6 +81,8 @@ def login(form: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get
     user = db.scalar(select(User).where(or_(User.email == form.username, User.username == form.username)))
     if user is None or not verify_password(form.password, user.password_hash):
         raise HTTPException(status_code=401, detail="Incorrect email/username or password")
+    if user.is_blocked:
+        raise HTTPException(status_code=403, detail="Account is blocked")
     return TokenResponse(access_token=create_access_token(user.id))
 
 @router.get("/me", response_model=UserResponse)

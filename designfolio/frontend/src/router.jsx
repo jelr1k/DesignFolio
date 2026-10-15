@@ -1,7 +1,8 @@
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 
-import { AdminPage, AdminUsersPage, AdminWorksPage } from "./pages/AdminPage";
+import { AdminCommentsPage, AdminPage, AdminUsersPage, AdminWorksPage } from "./pages/AdminPage";
 import { CatalogPage } from "./pages/CatalogPage";
+import { ContactsPage } from "./pages/ContactsPage";
 import { DashboardPage, ProfileSettingsPage } from "./pages/DashboardPage";
 import { DesignerProfilePage, DesignersPage } from "./pages/DesignersPage";
 import { LoginPage } from "./pages/LoginPage";
@@ -31,6 +32,7 @@ export function AppRouter() {
       <Routes>
         <Route path="/" element={<CatalogPage />} />
         <Route path="/works" element={<WorksCatalogPage />} />
+        <Route path="/contacts" element={<ContactsPage />} />
         <Route path="/works/new" element={<WorkEditorPage />} />
         <Route path="/works/:id/edit" element={<WorkEditorPage />} />
         <Route path="/works/:id" element={<WorkPage />} />
@@ -45,6 +47,7 @@ export function AppRouter() {
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/admin/works" element={<AdminWorksPage />} />
         <Route path="/admin/users" element={<AdminUsersPage />} />
+        <Route path="/admin/comments" element={<AdminCommentsPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
