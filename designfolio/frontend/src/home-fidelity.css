@@ -9,7 +9,7 @@
 .home-header {
   width: min(1280px, calc(100% - 64px));
   min-height: 92px;
-  padding: 14px 0;
+  padding: 14px 88px 14px 0;
   display: flex;
   align-items: center;
   gap: 0;
@@ -62,11 +62,12 @@
   font-size: 12px;
 }
 .account-login {
+  min-width: 82px;
   border: 1px solid rgba(255,255,255,.72);
   color: #fff;
   background: transparent;
 }
-.account-signup { background: #fff; color: #171717; }
+.account-signup { min-width: 152px; background: #fff; color: #171717; }
 .account-logout { border-color: rgba(255,255,255,.65); color: #fff; }
 .account-avatar { background: #111318; color: #fff; }
 .admin-chip { border-color: rgba(255,255,255,.55); color: #fff; }
@@ -405,6 +406,7 @@
   border-radius: 14px;
   background: #111318;
 }
+.home-community > .section-eyebrow { display: none; }
 .home-community .section-eyebrow { color: #ff383c; }
 .home-community h2 {
   margin: 0 0 8px;
@@ -441,7 +443,7 @@
 .home-footer p { color: #ffe5e6; }
 
 @media (max-width: 1180px) {
-  .home-header { gap: 0; }
+  .home-header { gap: 0; padding-right: 0; }
   .home-nav { margin-left: auto; gap: 20px; }
   .home-search { flex-basis: 165px; width: 165px; margin-left: 26px; }
   .home-account { margin-left: 18px; gap: 7px; }
@@ -454,7 +456,7 @@
 }
 
 @media (max-width: 900px) {
-  .home-header { min-height: 80px; flex-wrap: wrap; }
+  .home-header { min-height: 80px; flex-wrap: wrap; padding-right: 0; }
   .home-brand { margin-right: auto; }
   .home-menu-toggle {
     display: flex;
