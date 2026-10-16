@@ -293,7 +293,7 @@ export function CatalogPage() {
           </div>
 
           <div className="category-list">
-            {categories.length ? categories.slice(0, 6).map((item, index) => (
+            {categories.length ? categories.slice(0, 3).map((item, index) => (
               <button
                 className={`category-card category-card--${index % 3}${category === String(item.id) ? " is-active" : ""}`}
                 key={item.id}
@@ -370,6 +370,11 @@ export function CatalogPage() {
                 }}>
                 {works.slice(featuredIndex, featuredIndex + 3).map((work, index) => {
                   const categoryName = getCategoryName(categories, work.category_id);
+                  const authorName = work.author?.username || "Автор портфолио";
+                  const avatarSource = work.author?.avatar_url;
+                  const authorAvatar = avatarSource
+                    ? (avatarSource.startsWith("http") ? avatarSource : API + (avatarSource.startsWith("/") ? "" : "/") + avatarSource)
+                    : "";
                   return (
                     <Link className="home-work-card" to={`/works/${work.id}`} key={work.id}>
                       <WorkArtwork work={work} categoryName={categoryName} index={index} />
@@ -380,7 +385,12 @@ export function CatalogPage() {
                           <span className="work-open" aria-hidden="true">↗</span>
                         </div>
                         <div className="home-work-meta">
-                          <span>Автор #{work.author_id}</span>
+                          <span className="home-author-meta">
+                            {authorAvatar
+                              ? <img src={authorAvatar} alt="" loading="lazy" />
+                              : <span className="home-author-initials">{initials(authorName)}</span>}
+                            <span className="home-author-name">{authorName}</span>
+                          </span>
                           <span className="work-id">DF / {String(work.id).padStart(3, "0")}</span>
                         </div>
                       </div>
