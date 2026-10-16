@@ -927,8 +927,7 @@ button {
 .df-metric-card,
 .df-editor-preview,
 .df-checklist,
-.df-notice,
-.df-contact-note {
+.df-notice {
   border-radius: 0 14px 14px 0;
 }
 
@@ -973,8 +972,7 @@ button {
   .df-metric-card,
   .df-editor-preview,
   .df-checklist,
-  .df-notice,
-  .df-contact-note {
+  .df-notice {
     border-radius: 0 12px 12px 0;
   }
 
