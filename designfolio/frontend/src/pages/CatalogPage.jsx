@@ -326,7 +326,18 @@ export function CatalogPage() {
           </div>
 
           {loading ? (
-            <div className="works-state">Подбираем работы для тебя<span className="loading-dots">…</span></div>
+            <div className="works-grid home-skeleton-grid" aria-label="Загрузка популярных работ" aria-busy="true">
+              {Array.from({ length: 3 }, (_, index) => (
+                <div className="home-work-card home-work-card--skeleton" key={index}>
+                  <div className="home-skeleton-art" />
+                  <div className="home-skeleton-details">
+                    <span className="home-skeleton-line home-skeleton-line--short" />
+                    <span className="home-skeleton-line home-skeleton-line--title" />
+                    <span className="home-skeleton-line home-skeleton-line--meta" />
+                  </div>
+                </div>
+              ))}
+            </div>
           ) : error ? (
             <div className="works-state works-state--error">{error}</div>
           ) : works.length === 0 ? (
