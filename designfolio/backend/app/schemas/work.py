@@ -15,9 +15,20 @@ class WorkUpdate(BaseModel):
     description: str | None = None
     category_id: int | None = None
 
+class WorkAuthorResponse(BaseModel):
+    """Public author details shown beside published work."""
+    id: int
+    username: str
+    avatar_url: str | None = None
+    bio: str | None = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+
 class WorkResponse(WorkBase):
     id: int
     author_id: int
+    author: WorkAuthorResponse | None = None
     cover_url: str | None = None
     is_hidden: bool
     created_at: datetime
