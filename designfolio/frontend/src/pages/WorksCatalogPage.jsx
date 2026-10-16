@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { api } from "../api/client";
-import { Breadcrumbs, EmptyState, ErrorNotice, PageHeading, SiteLayout, WorkCard } from "../components/SiteLayout";
+import { Breadcrumbs, EmptyState, ErrorNotice, PageHeading, SiteLayout, WorkCard, WorkSkeletonGrid } from "../components/SiteLayout";
 
 export function WorksCatalogPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -117,7 +117,7 @@ export function WorksCatalogPage() {
 
       <ErrorNotice>{error}</ErrorNotice>
       {loading ? (
-        <div className="df-loading-state">Загружаем работы<span>…</span></div>
+        <WorkSkeletonGrid count={6} />
       ) : works.length === 0 ? (
         <EmptyState
           title="Здесь начинается чья-то история"
