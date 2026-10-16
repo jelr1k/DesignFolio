@@ -20,6 +20,7 @@ class WorkAuthorResponse(BaseModel):
     id: int
     username: str
     avatar_url: str | None = None
+    bio: str | None = None
 
     model_config = ConfigDict(from_attributes=True)
 
