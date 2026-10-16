@@ -54,7 +54,8 @@ export function DesignersPage() {
     const byAuthor = new Map();
     works.forEach((work) => {
       const key = String(work.author_id);
-      const current = byAuthor.get(key) || { id: key, works: [], latest: work };
+      const current = byAuthor.get(key) || { id: key, author: work.author || null, works: [], latest: work };
+      if (!current.author && work.author) current.author = work.author;
       current.works.push(work);
       byAuthor.set(key, current);
     });
