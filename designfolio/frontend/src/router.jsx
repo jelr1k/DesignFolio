@@ -14,14 +14,24 @@ import { WorksCatalogPage } from "./pages/WorksCatalogPage";
 function NotFoundPage() {
   return (
     <main className="df-not-found">
-      <span className="df-not-found-code">404</span>
-      <p className="df-eyebrow">НЕ ТОТ АДРЕС</p>
-      <h1>Страница потерялась.</h1>
-      <p>Такого маршрута пока нет. Вернись на главную или открой каталог работ.</p>
-      <div className="df-not-found-actions">
-        <Link className="df-button df-button--primary" to="/">На главную</Link>
-        <Link className="df-button df-button--secondary" to="/works">Каталог работ</Link>
-      </div>
+      <section className="df-not-found-panel">
+        <div className="df-not-found-art" aria-hidden="true">
+          <span className="df-not-found-orbit df-not-found-orbit--outer" />
+          <span className="df-not-found-orbit df-not-found-orbit--inner" />
+          <svg className="df-not-found-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="29" cy="35" r="20" />
+            <path d="M37 27 31 41 20 30 37 27Z" />
+            <path d="M42 10H55V23" />
+            <path d="M55 10 42 23" />
+          </svg>
+        </div>
+        <span className="df-not-found-code">404</span>
+        <h1>Страница не найдена</h1>
+        <div className="df-not-found-actions">
+          <Link className="df-button df-button--primary" to="/">На главную</Link>
+          <Link className="df-button df-button--secondary" to="/works">Каталог работ</Link>
+        </div>
+      </section>
     </main>
   );
 }
