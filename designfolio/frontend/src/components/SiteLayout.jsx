@@ -205,6 +205,23 @@ export function WorkCard({ work, index = 0, categoryName = "Работа" }) {
   );
 }
 
+export function WorkSkeletonGrid({ count = 6 }) {
+  return (
+    <div className="df-work-grid df-skeleton-grid" aria-label="Загрузка работ" aria-busy="true">
+      {Array.from({ length: count }, (_, index) => (
+        <div className="df-work-card df-work-card--skeleton" key={index}>
+          <div className="df-work-art df-skeleton-block" />
+          <div className="df-work-card-body">
+            <div className="df-skeleton-line df-skeleton-line--short" />
+            <div className="df-skeleton-line df-skeleton-line--title" />
+            <div className="df-skeleton-line df-skeleton-line--meta" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export function EmptyState({ title, description, action }) {
   return (
     <section className="df-empty-state">
