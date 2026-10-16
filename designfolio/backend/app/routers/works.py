@@ -5,7 +5,7 @@ import re
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import func, or_, select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 
 from app.database import get_db
 from app.models import Category, Like, Tag, Work, WorkTag
@@ -35,7 +35,9 @@ def unique_slug(title: str, db: Session, work_id: int | None = None) -> str:
 
 
 def get_work_or_404(work_id: int, db: Session) -> Work:
-    work = db.get(Work, work_id)
+    work = db.scalar(
+        select(Work).options(selectinload(Work.author)).where(Work.id == work_id)
+    )
     if work is None or work.is_hidden:
         raise HTTPException(status_code=404, detail="Work not found")
     return work
@@ -51,7 +53,7 @@ def list_works(
     sort: str = Query("newest", pattern="^(newest|oldest|popular)$"),
     db: Session = Depends(get_db),
 ):
-    query = select(Work).where(Work.is_hidden.is_(False))
+    query = select(Work).options(selectinload(Work.author)).where(Work.is_hidden.is_(False))
 
     if search:
         term = f"%{search.strip()}%"
