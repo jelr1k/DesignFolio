@@ -1193,3 +1193,106 @@ button {
     padding: 0 14px;
   }
 }
+
+
+/* Desktop category placement follows the Home Figma frame:
+   hero at y=140, heading at y=584 and 245x92 category cards at y=675. */
+@media (min-width: 901px) {
+  .home-hero {
+    min-height: 390px;
+    margin-top: 60px;
+  }
+
+  .home-hero .hero-copy {
+    height: 390px;
+    min-height: 390px;
+  }
+
+  .home-categories {
+    margin-top: 54px;
+  }
+
+  .home-categories .section-heading {
+    align-items: flex-start;
+    margin-bottom: 0;
+  }
+
+  .home-categories .section-heading h2 {
+    margin: 0;
+    font-size: 31px;
+    line-height: 40px;
+  }
+
+  .category-caption {
+    margin-top: 1px;
+    font-size: 15px;
+    line-height: 19px;
+  }
+
+  .category-list {
+    width: min(785px, 100%);
+    grid-template-columns: repeat(3, minmax(0, 245px));
+    gap: 25px;
+    margin-top: 31px;
+  }
+
+  .category-card {
+    width: 245px;
+    min-height: 92px;
+    height: 92px;
+    padding: 17px 18px;
+    border-radius: 14px;
+  }
+
+  .category-name {
+    margin: 0 24px 6px 0;
+    font-size: 18px;
+    line-height: 23px;
+  }
+
+  .category-count {
+    font-size: 13px;
+    line-height: 17px;
+  }
+
+  .category-arrow {
+    top: 18px;
+    right: 18px;
+    font-size: 20px;
+  }
+}
+
+/* Author identity is real profile data, not a numeric author surrogate. */
+.home-author-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  max-width: calc(100% - 52px);
+}
+
+.home-author-meta > img,
+.home-author-initials {
+  display: grid;
+  width: 23px;
+  height: 23px;
+  flex: 0 0 23px;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.home-author-initials {
+  background: #111318;
+  color: #fff;
+  font-size: 8px;
+  font-weight: 800;
+}
+
+.home-author-name {
+  overflow: hidden;
+  color: #111318;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
