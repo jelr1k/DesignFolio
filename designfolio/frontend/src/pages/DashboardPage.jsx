@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { api } from "../api/client";
-import { EmptyState, ErrorNotice, PageHeading, SiteLayout, WorkCard, useCurrentUser } from "../components/SiteLayout";
+import { EmptyState, ErrorNotice, PageHeading, SiteLayout, WorkCard, WorkSkeletonGrid, useCurrentUser } from "../components/SiteLayout";
 
 function DashboardSidebar({ active = "overview" }) {
   return (
@@ -72,10 +72,9 @@ export function DashboardPage() {
             <Link className="df-button df-button--primary" to="/dashboard/works/new">＋ Добавить работу</Link>
           </div>
 
-          <div className="df-metric-grid">
+          <div className="df-metric-grid df-metric-grid--dashboard">
             <article className="df-metric-card df-metric-card--coral"><span>01 / РАБОТЫ</span><strong>{loading ? "—" : works.length}</strong><p>Опубликовано в каталоге</p></article>
             <article className="df-metric-card"><span>02 / ИЗБРАННОЕ</span><strong>{loading ? "—" : favorites.length}</strong><p>Сохранённые проекты</p></article>
-            <article className="df-metric-card"><span>03 / РОЛЬ</span><strong className="df-role-value">{user.role === "admin" ? "Admin" : user.role === "designer" ? "Designer" : "Viewer"}</strong><p>Роль текущего аккаунта</p></article>
           </div>
 
           <div className="df-section-title-row">
@@ -84,7 +83,7 @@ export function DashboardPage() {
           </div>
           <ErrorNotice>{error}</ErrorNotice>
           {loading ? (
-            <div className="df-loading-state">Загружаем твои работы…</div>
+            <WorkSkeletonGrid count={3} />
           ) : works.length === 0 ? (
             <EmptyState title="Твоё портфолио начинается здесь" description="Добавь первую работу, чтобы она появилась в каталоге DesignFolio." action={<Link className="df-button df-button--primary" to="/dashboard/works/new">Добавить первую работу</Link>} />
           ) : (
