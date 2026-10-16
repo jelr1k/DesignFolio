@@ -5,8 +5,34 @@ import { Breadcrumbs, EmptyState, ErrorNotice, PageHeading, SiteLayout, WorkCard
 
 const palette = ["#FFBBC4", "#C6B5FF", "#FFD86D", "#8FD8CB", "#111318", "#F0F0EE"];
 
-function authorLabel(id) {
-  return "Автор #" + id;
+function authorLabel(author) {
+  return author?.username || "Автор портфолио";
+}
+
+function authorAvatarUrl(author) {
+  const source = author?.avatar_url;
+  if (!source) return "";
+  return source.startsWith("http") ? source : API + (source.startsWith("/") ? "" : "/") + source;
+}
+
+function initials(value) {
+  return (value || "DesignFolio")
+    .trim()
+    .split(/[\s._-]+/)
+    .slice(0, 2)
+    .map((part) => part[0] || "")
+    .join("")
+    .toUpperCase();
+}
+
+function AuthorAvatar({ author, className, fallbackBackground }) {
+  const source = authorAvatarUrl(author);
+  if (source) return <img className={className} src={source} alt="" loading="lazy" />;
+  return (
+    <span className={className} style={fallbackBackground ? { background: fallbackBackground } : undefined}>
+      {initials(author?.username)}
+    </span>
+  );
 }
 
 export function DesignersPage() {
@@ -36,7 +62,7 @@ export function DesignersPage() {
   }, [works]);
 
   const filtered = designers.filter((designer) => {
-    const text = (authorLabel(designer.id) + " " + designer.works.map((work) => work.title).join(" ")).toLowerCase();
+    const text = (authorLabel(designer.author) + " " + designer.works.map((work) => work.title).join(" ")).toLowerCase();
     return text.includes(query.trim().toLowerCase());
   });
 
@@ -70,9 +96,13 @@ export function DesignersPage() {
             <article className="df-designer-card" key={designer.id}>
               <div className="df-designer-card-top">
                 <span className="df-designer-number">DF / {String(index + 1).padStart(2, "0")}</span>
-                <span className="df-designer-orbit" style={{ background: palette[index % palette.length] }}>{String(designer.id).slice(-2).padStart(2, "0")}</span>
+                <AuthorAvatar
+                  author={designer.author}
+                  className="df-designer-orbit"
+                  fallbackBackground={palette[index % palette.length]}
+                />
               </div>
-              <h2>{authorLabel(designer.id)}</h2>
+              <h2>{authorLabel(designer.author)}</h2>
               <p className="df-designer-role">Автор портфолио</p>
               <div className="df-designer-stat"><strong>{designer.works.length}</strong><span>{designer.works.length === 1 ? "работа" : "работ(ы)"}</span></div>
               <div className="df-mini-work-list">
@@ -84,7 +114,6 @@ export function DesignersPage() {
         </div>
       )}
 
-      <p className="df-data-note">Публичный API сейчас отдаёт ID автора, но не имя и аватар. Поэтому до добавления такого endpoint в профилях используется номер автора, без выдуманных персональных данных.</p>
     </SiteLayout>
   );
 }
@@ -94,6 +123,7 @@ export function DesignerProfilePage() {
   const authorId = Number(String(username).replace(/^author-/, ""));
   const [works, setWorks] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [author, setAuthor] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -104,7 +134,9 @@ export function DesignerProfilePage() {
       api("/api/categories")
     ]).then(([result, categoryList]) => {
       if (!active) return;
-      setWorks((result.items || []).filter((work) => String(work.author_id) === String(authorId)));
+      const authorWorks = (result.items || []).filter((work) => String(work.author_id) === String(authorId));
+      setWorks(authorWorks);
+      setAuthor(authorWorks.find((work) => work.author)?.author || null);
       setCategories(categoryList || []);
     }).catch((requestError) => {
       if (active) setError(requestError.message || "Не удалось загрузить профиль.");
@@ -117,7 +149,7 @@ export function DesignerProfilePage() {
 
   return (
     <SiteLayout wide>
-      <Breadcrumbs items={[{ label: "Дизайнеры", to: "/designers" }, { label: validId ? authorLabel(authorId) : "Профиль" }]} />
+      <Breadcrumbs items={[{ label: "Дизайнеры", to: "/designers" }, { label: validId ? authorLabel(author) : "Профиль" }]} />
       {!validId ? (
         <EmptyState title="Профиль не найден" description="В текущем API публичные профили адресуются по ID автора." />
       ) : (
@@ -125,16 +157,15 @@ export function DesignerProfilePage() {
           <section className="df-profile-hero">
             <div className="df-profile-art" aria-hidden="true"><span /><span /><span /></div>
             <div className="df-profile-identity">
-              <span className="df-profile-avatar">{String(authorId).slice(-2).padStart(2, "0")}</span>
+              <AuthorAvatar author={author} className="df-profile-avatar" fallbackBackground="#ffdce0" />
               <div>
                 <p className="df-eyebrow">ПОРТФОЛИО АВТОРА</p>
-                <h1>{authorLabel(authorId)}</h1>
+                <h1>{authorLabel(author)}</h1>
                 <p>Автор опубликованных проектов на DesignFolio.</p>
               </div>
             </div>
             <div className="df-profile-stats">
-              <div><strong>{loading ? "—" : works.length}</strong><span>работ</span></div>
-              <div><strong>DF / {String(authorId).padStart(3, "0")}</strong><span>ID автора</span></div>
+              <div><strong>{loading ? "—" : works.length}</strong><span>{works.length === 1 ? "работа" : "работы"}</span></div>
             </div>
           </section>
 
