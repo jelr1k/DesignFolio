@@ -1011,3 +1011,185 @@ button {
   line-height: 1;
   transform: translateY(-50%);
 }
+
+
+/* Homepage backdrop now uses the same restrained red abstraction as interior pages. */
+.home-shell {
+  background:
+    radial-gradient(ellipse at 7% 0%, rgba(255, 255, 255, .16), transparent 34rem),
+    radial-gradient(ellipse at 96% 46%, rgba(92, 0, 18, .18), transparent 38rem),
+    #ff383c;
+}
+
+.home-shell::before {
+  z-index: 0;
+  background-image:
+    repeating-linear-gradient(135deg, transparent 0 142px, rgba(255, 255, 255, .065) 143px 144px, transparent 145px 280px),
+    repeating-linear-gradient(38deg, transparent 0 172px, rgba(82, 0, 18, .09) 173px 174px, transparent 175px 320px),
+    linear-gradient(145deg, rgba(255, 255, 255, .08), transparent 30%, rgba(75, 0, 18, .055) 70%, transparent);
+  background-position: center;
+  background-size: auto;
+  background-repeat: repeat;
+  opacity: 1;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+/* Remove the old, much busier edge mesh so both sets of pages share one visual language. */
+.home-shell::after {
+  display: none;
+}
+
+.home-content,
+.home-footer {
+  position: relative;
+  z-index: 1;
+}
+
+/* Hero card: proportions, typography, right-side corners and CTAs from the Figma block. */
+.hero-copy {
+  width: min(704px, 100%);
+  height: 390px;
+  min-height: 390px;
+  padding: 56px;
+  gap: 20px;
+  border-radius: 0 28px 28px 0;
+  background: #111318;
+  box-shadow: none;
+}
+
+.hero-kicker {
+  display: none;
+}
+
+.hero-copy h1 {
+  width: 100%;
+  max-width: 592px;
+  margin: 0;
+  color: #fff;
+  font-size: 56px;
+  line-height: 1.2;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+.hero-description {
+  width: 100%;
+  max-width: 516px;
+  margin: 0;
+  color: #aeb2bc;
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.hero-actions {
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 0;
+}
+
+.hero-copy .button-primary,
+.hero-copy .button-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  min-height: 54px;
+  padding: 0 18px;
+  border-radius: 0 10px 10px 0;
+  box-sizing: border-box;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  box-shadow: none;
+}
+
+.hero-copy .button-primary {
+  width: 171px;
+  min-width: 171px;
+  border: 1px solid transparent;
+  background: #f5f5f5;
+  color: #ff383c;
+}
+
+.hero-copy .button-primary > span[aria-hidden="true"] {
+  display: none;
+}
+
+.hero-copy .button-primary:hover {
+  background: #fff;
+  color: #ff383c;
+  transform: translateY(-1px);
+}
+
+.hero-copy .desktop-hero-secondary {
+  width: 166px;
+  min-width: 166px;
+  border: 1px solid #4d525c;
+  background: #111318;
+  color: #fff;
+}
+
+.hero-copy .desktop-hero-secondary:hover {
+  border-color: #777d88;
+  background: #1b1e24;
+}
+
+@media (max-width: 900px) {
+  .hero-copy {
+    width: min(704px, 100%);
+    height: auto;
+    min-height: 360px;
+    padding: 38px 36px;
+  }
+
+  .hero-copy h1 {
+    font-size: clamp(38px, 4.2vw, 50px);
+    line-height: 1.08;
+  }
+
+  .hero-description {
+    font-size: 18px;
+    line-height: 1.3;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero-copy {
+    width: 100%;
+    height: auto;
+    min-height: 390px;
+    padding: 24px 22px;
+    gap: 18px;
+    border-radius: 0 22px 22px 0;
+  }
+
+  .hero-copy h1 {
+    max-width: 100%;
+    font-size: clamp(34px, 9vw, 43px);
+    line-height: 1.08;
+    letter-spacing: -.035em;
+  }
+
+  .hero-description {
+    max-width: 100%;
+    font-size: 16px;
+    line-height: 1.3;
+  }
+
+  .hero-actions {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .hero-copy .button-primary,
+  .hero-copy .button-secondary {
+    width: 100%;
+    min-width: 0;
+    min-height: 50px;
+    padding: 0 14px;
+  }
+}
