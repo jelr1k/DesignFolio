@@ -34,6 +34,11 @@ function initials(value) {
     .map((part) => part[0] || "").join("").toUpperCase();
 }
 
+function publicImageUrl(value) {
+  if (!value) return "";
+  return value.startsWith("http") ? value : API + (value.startsWith("/") ? "" : "/") + value;
+}
+
 export function SiteHeader() {
   const { user, setUser } = useCurrentUser();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -174,7 +179,9 @@ export function PageHeading({ eyebrow, title, description, action }) {
 
 export function WorkCard({ work, index = 0, categoryName = "Работа" }) {
   const source = work?.cover_url || work?.image_url;
-  const imageUrl = source ? (source.startsWith("http") ? source : API + source) : "";
+  const imageUrl = publicImageUrl(source);
+  const authorName = work?.author?.username || "Автор портфолио";
+  const authorAvatar = publicImageUrl(work?.author?.avatar_url);
   return (
     <Link className="df-work-card" to={"/works/" + work.id}>
       <div className={"df-work-art df-work-art--" + (index % 6)}>
@@ -197,7 +204,12 @@ export function WorkCard({ work, index = 0, categoryName = "Работа" }) {
         </div>
         <h3>{work.title || "Без названия"}</h3>
         <div className="df-work-meta">
-          <span>Автор #{work.author_id}</span>
+          <span className="df-work-author-meta">
+            {authorAvatar
+              ? <img src={authorAvatar} alt="" loading="lazy" />
+              : <span className="df-work-author-initials">{initials(authorName)}</span>}
+            <span className="df-work-author-name">{authorName}</span>
+          </span>
           <span>DF / {String(work.id).padStart(3, "0")}</span>
         </div>
       </div>
