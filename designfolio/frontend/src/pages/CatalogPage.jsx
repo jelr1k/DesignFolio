@@ -267,7 +267,7 @@ export function CatalogPage() {
             </p>
             <div className="hero-actions">
               <a className="button-primary" href="#works">Смотреть работы <span aria-hidden="true">↗</span></a>
-              <a className="button-secondary desktop-hero-secondary" href="#community">Подробнее</a>
+              <Link className="button-secondary desktop-hero-secondary" to={user ? "/dashboard/works/new" : "/login"}>Загрузить работу</Link>
               <Link className="button-secondary mobile-hero-secondary" to={user ? "/dashboard/works/new" : "/login"}>Загрузить работу</Link>
             </div>
           </div>
