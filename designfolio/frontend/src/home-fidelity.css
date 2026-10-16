@@ -896,3 +896,93 @@ button {
     padding-bottom: 11px;
   }
 }
+
+
+/* Figma card geometry system.
+   Large shells use only right-side 28px corners; compact cards use 14px.
+   Inner artwork keeps its own all-corner crop, as in the source design. */
+.home-work-card,
+.home-community,
+.df-work-card,
+.df-designer-card,
+.df-profile-hero,
+.df-auth-visual,
+.df-auth-card,
+.df-settings-card,
+.df-description-panel,
+.df-author-panel,
+.df-comments-panel,
+.df-editor-section,
+.df-dashboard-sidebar,
+.df-admin-sidebar,
+.df-admin-action-card {
+  border-radius: 0 28px 28px 0;
+}
+
+.category-card,
+.works-state,
+.works-empty,
+.df-empty-state,
+.df-filter-panel,
+.df-metric-card,
+.df-editor-preview,
+.df-checklist,
+.df-notice,
+.df-contact-note {
+  border-radius: 0 14px 14px 0;
+}
+
+/* Visual content sits inside the larger card instead of inheriting its corners. */
+.work-art,
+.df-work-art,
+.df-work-cover,
+.df-work-cover-placeholder,
+.df-preview-cover {
+  border-radius: 18px;
+}
+
+/* The CTA panel is a card, while its decorative rings remain circular. */
+.home-community {
+  border-radius: 0 28px 28px 0;
+}
+
+@media (max-width: 680px) {
+  .home-work-card,
+  .home-community,
+  .df-work-card,
+  .df-designer-card,
+  .df-profile-hero,
+  .df-auth-visual,
+  .df-auth-card,
+  .df-settings-card,
+  .df-description-panel,
+  .df-author-panel,
+  .df-comments-panel,
+  .df-editor-section,
+  .df-dashboard-sidebar,
+  .df-admin-sidebar,
+  .df-admin-action-card {
+    border-radius: 0 20px 20px 0;
+  }
+
+  .category-card,
+  .works-state,
+  .works-empty,
+  .df-empty-state,
+  .df-filter-panel,
+  .df-metric-card,
+  .df-editor-preview,
+  .df-checklist,
+  .df-notice,
+  .df-contact-note {
+    border-radius: 0 12px 12px 0;
+  }
+
+  .work-art,
+  .df-work-art,
+  .df-work-cover,
+  .df-work-cover-placeholder,
+  .df-preview-cover {
+    border-radius: 14px;
+  }
+}
