@@ -13,18 +13,36 @@
 
 body:has(.df-site) {
   min-width: 320px;
-  background: var(--df-paper);
+  background: var(--df-red);
   color: var(--df-dark);
 }
 
 .df-site {
+  position: relative;
+  isolation: isolate;
   min-height: 100vh;
   overflow: clip;
   color: var(--df-dark);
   background:
-    radial-gradient(ellipse at 2% 0%, rgba(255, 56, 60, .055), transparent 34rem),
-    var(--df-paper);
+    radial-gradient(ellipse at 7% 0%, rgba(255,255,255,.16), transparent 34rem),
+    radial-gradient(ellipse at 96% 46%, rgba(92,0,18,.18), transparent 38rem),
+    var(--df-red);
+  animation: df-page-enter .28s ease both;
 }
+.df-site::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+  content: "";
+  background-image:
+    repeating-linear-gradient(135deg, transparent 0 142px, rgba(255,255,255,.065) 143px 144px, transparent 145px 280px),
+    repeating-linear-gradient(38deg, transparent 0 172px, rgba(82,0,18,.09) 173px 174px, transparent 175px 320px),
+    linear-gradient(145deg, rgba(255,255,255,.08), transparent 30%, rgba(75,0,18,.055) 70%, transparent);
+}
+.df-site > .df-header { position: sticky; z-index: 30; }
+.df-site > .df-main,
+.df-site > .df-footer { position: relative; z-index: 1; }
 
 .df-header {
   position: sticky;
@@ -439,6 +457,7 @@ body:has(.df-site) {
 .df-dashboard-greeting h1 { margin: 0; font-size: clamp(28px,3vw,38px); font-weight: 850; letter-spacing: -.06em; }
 .df-dashboard-greeting p:last-child { margin: 9px 0 0; color: #777b84; font-size: 13px; line-height: 1.5; }
 .df-metric-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 14px; margin-bottom: 36px; }
+.df-metric-grid--dashboard { grid-template-columns: repeat(2,minmax(0,1fr)); }
 .df-metric-card { min-width: 0; padding: 20px; border: 1px solid rgba(17,19,24,.08); border-radius: 14px; background: #fff; }
 .df-metric-card > span { display: block; color: #858790; font-size: 9px; font-weight: 800; letter-spacing: .1em; }
 .df-metric-card > strong { display: block; margin: 17px 0 7px; color: var(--df-dark); font-size: clamp(26px,3vw,35px); font-weight: 850; letter-spacing: -.06em; overflow-wrap: anywhere; }
@@ -601,4 +620,125 @@ body:has(.df-site) {
 }
 @media (prefers-reduced-motion: reduce) {
   .df-site *, .df-site *::before, .df-site *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}
+
+
+/* Brand canvas stays consistent between the home page and interior routes. */
+@keyframes df-page-enter {
+  from { opacity: 0; transform: translateY(7px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.home-shell { animation: df-page-enter .28s ease both; }
+
+/* Brand scrollbar: keep scrolling available, but match the red/ink palette. */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--df-dark) var(--df-red);
+}
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--df-red); }
+::-webkit-scrollbar-thumb {
+  min-height: 36px;
+  border: 2px solid var(--df-red);
+  border-radius: 0 8px 8px 0;
+  background: var(--df-dark);
+}
+::-webkit-scrollbar-thumb:hover { background: #353841; }
+
+/* Override the generic main width so the branded 404 is truly centered. */
+main.df-not-found {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  max-width: none;
+  min-height: 100vh;
+  margin: 0;
+  padding: clamp(20px, 4vw, 48px);
+  box-sizing: border-box;
+  background:
+    radial-gradient(circle at 16% 18%, rgba(255,255,255,.16), transparent 22rem),
+    var(--df-red);
+}
+.df-not-found-panel {
+  width: min(560px, 100%);
+  margin: 0 auto;
+  justify-self: center;
+  align-self: center;
+  align-items: center;
+  text-align: center;
+  border-radius: 0 28px 28px 0;
+}
+.df-not-found-panel h1 { width: 100%; text-align: center; }
+.df-not-found-actions { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; }
+
+/* Reusable, animated placeholders for content that is still loading. */
+.df-skeleton-grid { align-items: stretch; }
+.df-work-card--skeleton {
+  overflow: hidden;
+  min-width: 0;
+  border: 1px solid rgba(17,19,24,.09);
+  border-radius: 0 28px 28px 0;
+  background: rgba(255,255,255,.94);
+  pointer-events: none;
+}
+.df-work-card--skeleton .df-work-art {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1.5;
+  border-radius: 0;
+  background: #e9e9ec;
+}
+.df-work-card--skeleton .df-work-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 17px;
+}
+.df-skeleton-block,
+.df-skeleton-line {
+  background: linear-gradient(100deg, #e8e8eb 22%, #f7f7f8 40%, #e8e8eb 58%);
+  background-size: 220% 100%;
+  animation: df-skeleton-shimmer 1.25s ease-in-out infinite;
+}
+.df-skeleton-line { display: block; height: 10px; border-radius: 0 6px 6px 0; }
+.df-skeleton-line--short { width: 32%; height: 8px; }
+.df-skeleton-line--title { width: 82%; height: 17px; }
+.df-skeleton-line--meta { width: 55%; height: 8px; }
+@keyframes df-skeleton-shimmer {
+  from { background-position: 100% 0; }
+  to { background-position: -120% 0; }
+}
+.home-skeleton-grid { pointer-events: none; }
+.home-work-card--skeleton { min-width: 0; display: block; }
+.home-skeleton-art {
+  width: 100%;
+  aspect-ratio: 410 / 218;
+  border-radius: 0 16px 0 0;
+  background: linear-gradient(100deg, rgba(17,19,24,.13) 20%, rgba(255,255,255,.42) 42%, rgba(17,19,24,.13) 62%);
+  background-size: 220% 100%;
+  animation: df-skeleton-shimmer 1.25s ease-in-out infinite;
+}
+.home-skeleton-details { display: flex; flex-direction: column; gap: 12px; padding: 16px 0; }
+.home-skeleton-line {
+  display: block;
+  height: 10px;
+  border-radius: 0 6px 6px 0;
+  background: linear-gradient(100deg, rgba(17,19,24,.18) 20%, rgba(255,255,255,.42) 42%, rgba(17,19,24,.18) 62%);
+  background-size: 220% 100%;
+  animation: df-skeleton-shimmer 1.25s ease-in-out infinite;
+}
+.home-skeleton-line--short { width: 25%; height: 8px; }
+.home-skeleton-line--title { width: 76%; height: 18px; }
+.home-skeleton-line--meta { width: 46%; height: 8px; }
+
+@media (max-width: 680px) {
+  .df-metric-grid--dashboard { grid-template-columns: minmax(0,1fr); }
+  main.df-not-found { min-height: 100svh; }
+  .df-not-found-panel { min-height: 0; }
+  .df-not-found-actions { display: flex; flex-direction: column; width: 100%; }
+  .df-not-found-actions .df-button { width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .df-site, .home-shell { animation: none !important; }
+  .df-skeleton-block, .df-skeleton-line, .home-skeleton-art, .home-skeleton-line { animation: none !important; }
 }
