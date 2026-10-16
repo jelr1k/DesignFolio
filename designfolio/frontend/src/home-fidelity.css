@@ -984,3 +984,30 @@ button {
     border-radius: 14px;
   }
 }
+
+
+/* Keep login labels vertically centered inside their click targets. */
+.df-login-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 14px;
+  line-height: 1;
+}
+.df-auth-card > .df-button--primary {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  padding: 0 46px;
+  line-height: 1;
+}
+.df-auth-card > .df-button--primary > span[aria-hidden="true"] {
+  position: absolute;
+  top: 50%;
+  right: 18px;
+  line-height: 1;
+  transform: translateY(-50%);
+}
