@@ -20,9 +20,8 @@ ALLOWED = {
     "image/jpeg": ".jpg",
     "image/png": ".png",
     "image/webp": ".webp",
-    "image/gif": ".gif",
 }
-MAX_SIZE = 8 * 1024 * 1024
+MAX_SIZE = 5 * 1024 * 1024
 
 
 def upload_to_supabase(filename: str, data: bytes, content_type: str) -> str:
@@ -39,7 +38,6 @@ def upload_to_supabase(filename: str, data: bytes, content_type: str) -> str:
         data=data,
         method="POST",
         headers={
-            "Authorization": f"Bearer {settings.supabase_secret_key}",
             "apikey": settings.supabase_secret_key,
             "Content-Type": content_type,
             "Cache-Control": "3600",
@@ -88,7 +86,7 @@ async def upload_image(
     if not data:
         raise HTTPException(status_code=400, detail="Empty file")
     if len(data) > MAX_SIZE:
-        raise HTTPException(status_code=413, detail="Image is too large (max 8 MB)")
+        raise HTTPException(status_code=413, detail="Image is too large (max 5 MB)")
 
     filename = f"works/{work_id}/{uuid4().hex}{ALLOWED[file.content_type]}"
     public_url = upload_to_supabase(filename, data, file.content_type)

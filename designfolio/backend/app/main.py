@@ -9,6 +9,7 @@ from app.routers.likes import router as likes_router
 from app.routers.works import router as works_router
 from app.routers.images import router as images_router
 from app.routers.profile import router as profile_router
+from app.routers.admin import router as admin_router
 
 app = FastAPI(title="DesignFolio API", version="0.1.0")
 
@@ -27,6 +28,7 @@ app.include_router(likes_router)
 app.include_router(works_router)
 app.include_router(images_router)
 app.include_router(profile_router)
+app.include_router(admin_router)
 
 
 @app.get("/api/health", tags=["system"])
