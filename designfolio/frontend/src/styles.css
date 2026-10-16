@@ -288,7 +288,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
   overflow: hidden;
   color: #fff;
   background: var(--ink);
-  border-radius: 0 28px 28px 0;
+  border-radius: 0 28px 0 0;
 }
 .hero-kicker, .section-eyebrow {
   margin: 0;
@@ -467,7 +467,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 .text-link span { font-size: 17px; transition: transform .2s ease; }
 .text-link:hover span { transform: translateX(4px); }
 .works-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 26px 24px; }
-.home-work-card { min-width: 0; display: block; color: var(--ink); text-decoration: none; }
+.home-work-card { min-width: 0; display: block; color: var(--ink); text-decoration: none; -webkit-tap-highlight-color: transparent; touch-action: manipulation; transition: transform .18s ease; }
 .work-art {
   position: relative;
   width: 100%;
@@ -478,6 +478,16 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 }
 .work-art > img { width: 100%; height: 100%; display: block; object-fit: cover; transition: transform .45s cubic-bezier(.2,.7,.2,1); }
 .home-work-card:hover .work-art > img { transform: scale(1.045); }
+.home-work-card:active { transform: translateY(-2px) scale(.99); }
+.home-work-card:active .work-art > img { transform: scale(1.035); }
+@media (hover: none) and (pointer: coarse) {
+  .home-work-card:active .work-art {
+    box-shadow: 0 10px 28px rgba(17, 19, 24, .22);
+  }
+  .home-work-card:active .home-work-title-row {
+    color: var(--accent-red);
+  }
+}
 .work-category {
   position: absolute;
   top: 13px;
@@ -734,3 +744,136 @@ body:not(.unused) input, body:not(.unused) select, body:not(.unused) textarea { 
 .df-contact-note h2{margin:8px 0}
 .df-contact-note p:last-child{max-width:720px;line-height:1.7}
 @media(max-width:640px){.df-admin-row-actions{min-width:160px}}
+
+
+/* Scroll reveals: animate the page sections as they enter the viewport. */
+[data-reveal] {
+  scroll-margin-top: 100px;
+}
+.df-reveal-pending {
+  opacity: 0;
+  transform: translateY(26px) scale(.99);
+  transition:
+    opacity .65s cubic-bezier(.2, .7, .2, 1),
+    transform .65s cubic-bezier(.2, .7, .2, 1);
+  will-change: opacity, transform;
+}
+.df-reveal-pending.df-revealed {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Branded 404: keep the useful error code, not hosting/debug details. */
+.df-not-found {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: clamp(18px, 4vw, 48px);
+  color: var(--paper);
+  background:
+    radial-gradient(circle at 15% 18%, rgba(255,255,255,.16), transparent 22rem),
+    var(--accent-red);
+}
+.df-not-found-panel {
+  width: min(620px, 100%);
+  min-height: 450px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: clamp(28px, 6vw, 64px);
+  text-align: center;
+  color: var(--paper);
+  background: var(--ink);
+  border-radius: 0 28px 0 0;
+  overflow: hidden;
+}
+.df-not-found-art {
+  position: relative;
+  width: 112px;
+  height: 112px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 2px;
+}
+.df-not-found-orbit {
+  position: absolute;
+  inset: 8px;
+  border: 1px solid rgba(255,255,255,.35);
+  border-radius: 50%;
+}
+.df-not-found-orbit--outer {
+  animation: df-not-found-orbit 13s linear infinite;
+}
+.df-not-found-orbit--inner {
+  inset: 21px;
+  border-color: rgba(255,56,60,.8);
+  border-style: dashed;
+  animation: df-not-found-orbit 9s linear infinite reverse;
+}
+.df-not-found-icon {
+  position: relative;
+  z-index: 1;
+  width: 54px;
+  height: 54px;
+  stroke: var(--paper);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  animation: df-not-found-float 3.2s ease-in-out infinite;
+}
+.df-not-found-code {
+  display: block;
+  color: var(--accent-red);
+  font-size: clamp(76px, 14vw, 118px);
+  font-weight: 800;
+  letter-spacing: -.09em;
+  line-height: .9;
+}
+.df-not-found-panel h1 {
+  margin: 0 0 8px;
+  max-width: 100%;
+  font-size: clamp(22px, 4vw, 30px);
+  letter-spacing: -.045em;
+  line-height: 1.15;
+}
+.df-not-found-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 4px;
+}
+@keyframes df-not-found-orbit {
+  to { transform: rotate(360deg); }
+}
+@keyframes df-not-found-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+@media (max-width: 480px) {
+  .df-not-found-panel {
+    min-height: 390px;
+    padding: 26px 20px;
+  }
+  .df-not-found-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+  .df-not-found-actions .df-button {
+    width: 100%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .df-reveal-pending,
+  .df-reveal-pending.df-revealed,
+  .df-not-found-orbit,
+  .df-not-found-icon {
+    opacity: 1;
+    transform: none;
+    transition: none !important;
+    animation: none !important;
+    will-change: auto;
+  }
+}
