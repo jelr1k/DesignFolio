@@ -3,6 +3,16 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { API, api } from "../api/client";
 import { Breadcrumbs, EmptyState, ErrorNotice, PageHeading, SiteLayout, WorkCard, useCurrentUser } from "../components/SiteLayout";
 
+function avatarUrl(value) {
+  if (!value) return "";
+  return value.startsWith("http") ? value : API + (value.startsWith("/") ? "" : "/") + value;
+}
+
+function authorInitials(value) {
+  return (value || "DF").trim().split(/[\s._-]+/).slice(0, 2)
+    .map((part) => part[0] || "").join("").toUpperCase();
+}
+
 export function WorkPage() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -96,7 +106,7 @@ export function WorkPage() {
         <div>
           <p className="df-eyebrow">PROJECT / {String(work.id).padStart(3, "0")}</p>
           <h1>{work.title}</h1>
-          <div className="df-work-detail-meta"><span>{categoryName}</span><span>Автор #{work.author_id}</span><span>DesignFolio</span></div>
+          <div className="df-work-detail-meta"><span>{categoryName}</span><span>{work.author?.username || "Автор портфолио"}</span><span>DesignFolio</span></div>
         </div>
         <div className="df-work-detail-actions">
           <button className={"df-button " + (like?.liked ? "df-button--liked" : "df-button--secondary")} type="button" onClick={toggleLike}>♡ {like?.liked ? "Нравится" : "Поставить лайк"} <strong>{like?.likes_count ?? "—"}</strong></button>
@@ -120,8 +130,10 @@ export function WorkPage() {
 
         <aside className="df-work-detail-aside">
           <section className="df-author-panel">
-            <span className="df-author-avatar">{String(work.author_id).slice(-2).padStart(2, "0")}</span>
-            <div><p className="df-eyebrow">АВТОР ПРОЕКТА</p><h2>Автор #{work.author_id}</h2><p>Автор портфолио DesignFolio</p></div>
+            {avatarUrl(work.author?.avatar_url)
+              ? <img className="df-author-avatar" src={avatarUrl(work.author.avatar_url)} alt="" loading="lazy" />
+              : <span className="df-author-avatar">{authorInitials(work.author?.username)}</span>}
+            <div><p className="df-eyebrow">АВТОР ПРОЕКТА</p><h2>{work.author?.username || "Автор портфолио"}</h2><p>{work.author?.bio || "Автор проектов на DesignFolio"}</p></div>
             <Link className="df-button df-button--secondary df-button--full" to={"/designers/" + work.author_id}>Все работы автора ↗</Link>
           </section>
           <section className="df-comments-panel">
