@@ -742,3 +742,62 @@ main.df-not-found {
   .df-site, .home-shell { animation: none !important; }
   .df-skeleton-block, .df-skeleton-line, .home-skeleton-art, .home-skeleton-line { animation: none !important; }
 }
+
+
+/* Text called out for the public catalogue and footer uses the page's black ink. */
+.df-footer-brand p,
+.df-footer nav a,
+.df-copyright,
+.df-page-description,
+.df-results-row > span,
+.df-pagination span,
+.df-pagination strong {
+  color: #111318;
+}
+
+.df-work-author-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  max-width: 70%;
+}
+
+.df-work-author-meta > img,
+.df-work-author-initials {
+  display: grid;
+  width: 23px;
+  height: 23px;
+  flex: 0 0 23px;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.df-work-author-initials {
+  background: #ffdce0;
+  color: #111318;
+  font-size: 8px;
+  font-weight: 800;
+}
+
+.df-work-author-name {
+  overflow: hidden;
+  color: #111318;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.df-designer-orbit,
+.df-profile-avatar,
+.df-author-avatar {
+  overflow: hidden;
+  object-fit: cover;
+}
+
+img.df-designer-orbit,
+img.df-profile-avatar,
+img.df-author-avatar {
+  display: block;
+}
