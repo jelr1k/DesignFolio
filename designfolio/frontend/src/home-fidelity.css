@@ -1307,3 +1307,203 @@ button {
   max-width: 720px;
   line-height: 1.7;
 }
+
+
+/* Interior pages: use the same DesignFolio canvas, contrast and controls as the homepage.
+   This is intentionally scoped to .df-site so the homepage itself keeps its layout. */
+body:has(.df-site) {
+  background: #ff383c;
+  color: #111318;
+}
+
+.df-site {
+  --df-red: #ff383c;
+  --df-dark: #111318;
+  --df-paper: #f5f5f2;
+  --df-white: #fff;
+  --df-muted: #aeb2bc;
+  --df-border: rgba(17, 19, 24, .16);
+  color: #111318;
+  background:
+    radial-gradient(ellipse at 7% 0%, rgba(255,255,255,.16), transparent 34rem),
+    radial-gradient(ellipse at 96% 46%, rgba(92,0,18,.18), transparent 38rem),
+    #ff383c;
+}
+
+.df-site::before {
+  background-image:
+    repeating-linear-gradient(135deg, transparent 0 142px, rgba(255,255,255,.065) 143px 144px, transparent 145px 280px),
+    repeating-linear-gradient(38deg, transparent 0 172px, rgba(82,0,18,.09) 173px 174px, transparent 175px 320px),
+    linear-gradient(145deg, rgba(255,255,255,.08), transparent 30%, rgba(75,0,18,.055) 70%, transparent);
+}
+
+.df-site > .df-header {
+  border-bottom-color: rgba(255,255,255,.20);
+  background: rgba(255,56,60,.86);
+  color: #fff;
+  backdrop-filter: blur(18px);
+}
+
+.df-site .df-brand { color: #fff; }
+.df-site .df-brand-mark { background: #111318; color: #fff; }
+.df-site .df-nav a { color: rgba(255,255,255,.84); }
+.df-site .df-nav a:hover,
+.df-site .df-nav a.is-active { color: #fff; }
+.df-site .df-nav a.is-active::after { background: #fff; }
+
+.df-site .df-search {
+  border-color: rgba(255,255,255,.18);
+  background: rgba(255,255,255,.13);
+  color: #fff;
+}
+.df-site .df-search:focus-within {
+  border-color: rgba(255,255,255,.65);
+  background: rgba(255,255,255,.18);
+}
+.df-site .df-search > span { color: #fff; }
+.df-site .df-search input { color: #fff; }
+.df-site .df-search input::placeholder { color: rgba(255,255,255,.72); }
+.df-site .df-account-user,
+.df-site .df-login-link { color: #fff; }
+.df-site .df-quiet-button { color: rgba(255,255,255,.78); }
+.df-site .df-quiet-button:hover,
+.df-site .df-text-button:hover { color: #fff; }
+
+.df-site .df-main { position: relative; z-index: 1; }
+.df-site .df-breadcrumbs,
+.df-site .df-breadcrumbs a { color: rgba(255,255,255,.75); }
+.df-site .df-breadcrumbs a:hover,
+.df-site .df-breadcrumbs [aria-current="page"] { color: #fff; }
+.df-site .df-breadcrumb-separator { color: rgba(255,255,255,.52); }
+
+.df-site .df-page-heading h1,
+.df-site .df-editor-heading h1,
+.df-site .df-work-detail-heading h1,
+.df-site .df-dashboard-greeting h1 { color: #fff; }
+
+.df-site .df-page-heading > div > .df-eyebrow,
+.df-site .df-editor-heading > div > .df-eyebrow,
+.df-site .df-work-detail-heading > div > .df-eyebrow,
+.df-site .df-dashboard-greeting > div > .df-eyebrow,
+.df-site .df-section-title-row > div > .df-eyebrow,
+.df-site .df-admin-content > .df-page-heading .df-eyebrow {
+  color: #ffe5e6;
+}
+
+.df-site .df-page-description,
+.df-site .df-dashboard-greeting p:last-child,
+.df-site .df-editor-heading > div > p:last-child,
+.df-site .df-results-row > span,
+.df-site .df-pagination span,
+.df-site .df-pagination strong {
+  color: rgba(255,255,255,.82);
+}
+
+.df-site .df-section-title-row h2,
+.df-site .df-results-row > p { color: #fff; }
+.df-site .df-section-title-row .df-text-link { color: #fff; }
+.df-site .df-section-title-row .df-text-link:hover { color: #ffe5e6; }
+
+.df-site .df-footer {
+  border-top-color: rgba(255,255,255,.25);
+}
+.df-site .df-footer-brand p,
+.df-site .df-footer nav a,
+.df-site .df-copyright { color: rgba(255,255,255,.78); }
+.df-site .df-footer nav a:hover { color: #fff; }
+
+.df-site .df-metric-card--coral {
+  border-color: #111318;
+  background: #111318;
+  color: #fff;
+}
+.df-site .df-metric-card--coral > span { color: #ff777b; }
+.df-site .df-metric-card--coral > strong,
+.df-site .df-metric-card--coral p { color: #fff; }
+.df-site .df-metric-card--coral a,
+.df-site .df-metric-card--coral .df-table-link { color: #ff777b; }
+.df-site .df-metric-card--coral a:hover { color: #fff; }
+
+/* Keep content cards bright, like the project cards on the homepage. */
+.df-site .df-work-card,
+.df-site .df-designer-card,
+.df-site .df-empty-state,
+.df-site .df-filter-panel,
+.df-site .df-settings-card,
+.df-site .df-auth-card,
+.df-site .df-editor-section,
+.df-site .df-editor-preview,
+.df-site .df-checklist,
+.df-site .df-description-panel,
+.df-site .df-author-panel,
+.df-site .df-comments-panel,
+.df-site .df-table-wrap,
+.df-site .df-metric-card:not(.df-metric-card--coral) {
+  color: #111318;
+}
+
+.df-site .df-work-card { background: #fff; }
+.df-site .df-work-card:hover { box-shadow: 0 12px 24px rgba(17,19,24,.12); }
+.df-site .df-filter-panel,
+.df-site .df-search-field,
+.df-site .df-sort-field { border-color: rgba(17,19,24,.14); }
+.df-site .df-notice--info { color: #334d91; }
+.df-site .df-notice--error { color: #a41e2a; }
+.df-site .df-notice:not(.df-notice--error):not(.df-notice--info) { color: #176a48; }
+
+.df-site .df-auth-visual {
+  background: #111318;
+  color: #fff;
+}
+.df-site .df-auth-visual-copy h1,
+.df-site .df-auth-visual-copy p { color: #fff; }
+.df-site .df-auth-visual-copy p { color: #aeb2bc; }
+.df-site .df-auth-visual .df-eyebrow { color: #ff777b; }
+
+.df-site .df-work-detail-meta > span {
+  border-color: rgba(255,255,255,.30);
+}
+.df-site .df-work-detail-actions .df-button--secondary {
+  background: #111318;
+  color: #fff;
+}
+.df-site .df-admin-shortcut {
+  border-color: rgba(255,255,255,.25);
+  background: rgba(255,255,255,.92);
+}
+
+.df-site .df-nav.is-open {
+  border-color: rgba(255,255,255,.18);
+  background: #111318;
+}
+.df-site .df-nav.is-open a {
+  border-bottom-color: rgba(255,255,255,.12);
+  color: rgba(255,255,255,.86);
+}
+.df-site .df-nav.is-open a:hover,
+.df-site .df-nav.is-open a.is-active { color: #fff; }
+.df-site .df-menu-toggle {
+  border-color: rgba(255,255,255,.42);
+  background: transparent;
+}
+.df-site .df-menu-toggle span { background: #fff; }
+
+.df-site a:focus-visible,
+.df-site button:focus-visible,
+.df-site input:focus-visible,
+.df-site select:focus-visible,
+.df-site textarea:focus-visible {
+  outline-color: #fff;
+}
+
+@media (max-width: 700px) {
+  .df-site > .df-header {
+    background: rgba(255,56,60,.94);
+  }
+  .df-site .df-search {
+    background: rgba(255,255,255,.13);
+  }
+  .df-site .df-footer {
+    border-top-color: rgba(255,255,255,.25);
+  }
+}
