@@ -740,9 +740,9 @@ body:not(.unused) input, body:not(.unused) select, body:not(.unused) textarea { 
 .df-admin-row-actions button{white-space:nowrap}
 .df-contact-grid .df-metric-card{min-height:230px;display:flex;flex-direction:column;align-items:flex-start;gap:12px}
 .df-contact-grid .df-metric-card p{flex:1}
-.df-contact-note{margin-top:28px}
+.df-contact-note{margin-top:28px;grid-template-columns:minmax(0,1fr)}
 .df-contact-note h2{margin:8px 0}
-.df-contact-note p:last-child{max-width:720px;line-height:1.7}
+.df-contact-note > p:not(.df-eyebrow){max-width:720px;line-height:1.7}
 @media(max-width:640px){.df-admin-row-actions{min-width:160px}}
 
 
