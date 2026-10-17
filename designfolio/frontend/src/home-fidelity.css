@@ -1296,3 +1296,14 @@ button {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/* Contacts page: keep the contact copy in a single full-width column.
+   This file is loaded after interior.css, so the layout override must live here. */
+.df-settings-card.df-contact-note {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.df-settings-card.df-contact-note > p:not(.df-eyebrow) {
+  max-width: 720px;
+  line-height: 1.7;
+}
